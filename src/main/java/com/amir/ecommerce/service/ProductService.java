@@ -1,6 +1,6 @@
 package com.amir.ecommerce.service;
 
-import com.amir.ecommerce.dto.product.ProductDto;
+import com.amir.ecommerce.dto.ProductDto;
 import com.amir.ecommerce.model.Product;
 
 import java.util.List;

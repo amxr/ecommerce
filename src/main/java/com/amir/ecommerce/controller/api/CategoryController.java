@@ -1,4 +1,4 @@
-package com.amir.ecommerce.controller;
+package com.amir.ecommerce.controller.api;
 
 import com.amir.ecommerce.model.Category;
 import com.amir.ecommerce.service.CategoryService;
@@ -26,7 +26,7 @@ public class CategoryController {
         return categoryService.getCategories();
     }
 
-    @PutMapping("/update/{categoryId")
+    @PutMapping("/update/{categoryId}")
     public void updateCategory(@PathVariable("categoryID") Long categoryID, @Valid @RequestBody Category category){
         categoryService.updateCategory(categoryID, category);
     }

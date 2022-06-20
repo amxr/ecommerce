@@ -1,6 +1,6 @@
 package com.amir.ecommerce.service.impl;
 
-import com.amir.ecommerce.dto.product.ProductDto;
+import com.amir.ecommerce.dto.ProductDto;
 import com.amir.ecommerce.model.Category;
 import com.amir.ecommerce.model.Product;
 import com.amir.ecommerce.repository.CategoryRepository;

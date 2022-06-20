@@ -1,6 +1,6 @@
-package com.amir.ecommerce.controller;
+package com.amir.ecommerce.controller.api;
 
-import com.amir.ecommerce.dto.product.ProductDto;
+import com.amir.ecommerce.dto.ProductDto;
 import com.amir.ecommerce.model.Product;
 import com.amir.ecommerce.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.amir.ecommerce.dto.product;
+package com.amir.ecommerce.dto;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
