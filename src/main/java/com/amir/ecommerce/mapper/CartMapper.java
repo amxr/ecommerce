@@ -1,14 +1,13 @@
 package com.amir.ecommerce.mapper;
 
-import com.amir.ecommerce.dto.CartDto;
 import com.amir.ecommerce.dto.CartItemDto;
-import com.amir.ecommerce.model.Cart;
+import com.amir.ecommerce.model.CartItem;
 
 public class CartMapper {
-    public static CartItemDto toCartItemDto(Cart cart){
+    public static CartItemDto toCartItemDto(CartItem cartItem){
         return new CartItemDto()
-                .setId(cart.getId())
-                .setProduct(cart.getProduct())
-                .setQuantity(cart.getQuantity());
+                .setId(cartItem.getId())
+                .setProduct(cartItem.getProduct())
+                .setQuantity(cartItem.getQuantity());
     }
 }

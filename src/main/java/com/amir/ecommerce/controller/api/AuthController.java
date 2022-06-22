@@ -2,7 +2,7 @@ package com.amir.ecommerce.controller.api;
 
 import com.amir.ecommerce.controller.request.LoginCredentials;
 import com.amir.ecommerce.controller.request.SignUpRequest;
-import com.amir.ecommerce.model.JWTToken;
+import com.amir.ecommerce.security.jwt.JWTToken;
 import com.amir.ecommerce.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -1,6 +1,9 @@
 package com.amir.ecommerce.service.impl;
 
+import com.amir.ecommerce.controller.request.ProductRequest;
 import com.amir.ecommerce.dto.ProductDto;
+import com.amir.ecommerce.exceptions.ResourceNotFoundException;
+import com.amir.ecommerce.mapper.ProductMapper;
 import com.amir.ecommerce.model.Category;
 import com.amir.ecommerce.model.Product;
 import com.amir.ecommerce.repository.CategoryRepository;
@@ -23,13 +26,15 @@ public class ProductServiceImpl implements ProductService {
     ProductRepository productRepository;
 
     @Override
-    public void add(ProductDto productDto) {
-        Category category = categoryRepository.findById(productDto.getCategoryId())
+    public void add(ProductRequest productRequest) {
+        Category category = categoryRepository.findById(productRequest.getCategoryId())
                 .orElseThrow(
-                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid category")
+                        () -> new ResourceNotFoundException("Category not found.")
                 );
 
-        Product product = getProductFromDto(productDto, category);
+        Product product = ProductMapper.toProduct(productRequest);
+        product.setCategory(category);
+
         productRepository.save(product);
     }
 
@@ -39,29 +44,40 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void update(Long productID, ProductDto productDto) {
+    public void update(Long productID, ProductRequest productRequest) {
 
-        if(!productRepository.existsById(productID)){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid product id!");
-        }
-
-        Category category = categoryRepository.findById(productDto.getCategoryId())
+        Product product = productRepository.findById(productID)
                 .orElseThrow(
-                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid category id.")
+                        () -> new ResourceNotFoundException("Invalid product id!")
                 );
 
-        Product product = getProductFromDto(productDto, category);
-        product.setId(productID);
+        Category category = categoryRepository.findById(productRequest.getCategoryId())
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("Category not found.")
+                );
+
+        ProductMapper.updateProduct(product, productRequest);
+        product.setCategory(category);
 
         productRepository.save(product);
     }
 
-    private Product getProductFromDto(ProductDto productDto, Category category) {
-        return new Product()
-                .setCategory(category)
-                .setDescription(productDto.getDescription())
-                .setImageURL(productDto.getImageURL())
-                .setName(productDto.getName())
-                .setPrice(productDto.getPrice());
+    @Override
+    public Product getProduct(Long productId) {
+        return productRepository.findById(productId)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("Product not found!")
+                );
     }
+
+    @Override
+    public void delete(Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("Invalid product id!")
+                );
+
+        productRepository.delete(product);
+    }
+
 }

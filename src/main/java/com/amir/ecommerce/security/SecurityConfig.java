@@ -1,5 +1,6 @@
 package com.amir.ecommerce.security;
 
+import com.amir.ecommerce.security.jwt.JWTFilter;
 import com.amir.ecommerce.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

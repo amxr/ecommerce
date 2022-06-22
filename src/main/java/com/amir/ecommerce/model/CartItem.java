@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @ToString
 @RequiredArgsConstructor
 @Accessors(chain = true)
-public class Cart {
+public class CartItem {
     @Id
     @SequenceGenerator(name = "cart_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cart_sequence")

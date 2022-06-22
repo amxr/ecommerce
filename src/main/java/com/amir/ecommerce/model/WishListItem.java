@@ -1,5 +1,6 @@
 package com.amir.ecommerce.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -16,8 +17,8 @@ import java.time.LocalDateTime;
 @ToString
 @RequiredArgsConstructor
 @Accessors(chain = true)
-@Table(name="wishlist")
-public class WishList {
+@Table(name="wishlistitem")
+public class WishListItem {
     @Id
     @SequenceGenerator(name = "wishlist_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "wishlist_sequence")
@@ -25,11 +26,12 @@ public class WishList {
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "user_id")
+    @JsonIgnore
     private User user;
 
     @CreationTimestamp
-    @Column(name = "created_date")
-    private LocalDateTime createdDate;
+    @Column(name = "added_date")
+    private LocalDateTime addedDate;
 
     @ManyToOne()
     @JoinColumn(name = "product_id")

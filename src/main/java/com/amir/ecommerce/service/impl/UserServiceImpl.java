@@ -38,4 +38,10 @@ public class UserServiceImpl implements UserService {
 
         return UserMapper.toUserDto(user);
     }
+
+    @Override
+    public User getUser(){
+        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userRepository.findUserByEmail(email).orElseThrow();
+    }
 }

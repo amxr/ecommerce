@@ -5,15 +5,15 @@ import com.amir.ecommerce.dto.CartDto;
 import com.amir.ecommerce.dto.CartItemDto;
 import com.amir.ecommerce.mapper.CartMapper;
 import com.amir.ecommerce.exceptions.ResourceNotFoundException;
-import com.amir.ecommerce.model.Cart;
+import com.amir.ecommerce.model.CartItem;
 import com.amir.ecommerce.model.Product;
 import com.amir.ecommerce.model.User;
 import com.amir.ecommerce.repository.CartRepository;
 import com.amir.ecommerce.repository.ProductRepository;
 import com.amir.ecommerce.repository.UserRepository;
 import com.amir.ecommerce.service.CartService;
+import com.amir.ecommerce.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,26 +29,27 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private UserService userService;
+
     @Override
     public void addToCart(AddToCartRequest addToCartRequest) {
-        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userRepository.findUserByEmail(email.toLowerCase()).orElseThrow();
+        User user = userService.getUser();
 
         Product product = productRepository.findById(addToCartRequest.getProductId())
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
-        Cart cart = new Cart()
+        CartItem cartItem = new CartItem()
                 .setProduct(product)
                 .setUser(user)
                 .setQuantity(addToCartRequest.getQuantity());
 
-        cartRepository.save(cart);
+        cartRepository.save(cartItem);
     }
 
     @Override
     public CartDto getCartItems() {
-        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userRepository.findUserByEmail(email.toLowerCase()).orElseThrow();
+        User user = userService.getUser();
 
         List<CartItemDto> cartItems = cartRepository
                 .findAllByUserOrderByCreatedDateDesc(user)

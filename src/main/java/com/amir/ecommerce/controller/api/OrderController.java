@@ -32,4 +32,9 @@ public class OrderController {
     public List<Order> getAllOrders(){
         return orderService.getAllOrders();
     }
+
+    @GetMapping("/{orderId}")
+    public Order getOrder(@PathVariable Long orderId){
+        return orderService.getOrder(orderId);
+    }
 }

@@ -1,4 +1,4 @@
-package com.amir.ecommerce.security;
+package com.amir.ecommerce.security.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;

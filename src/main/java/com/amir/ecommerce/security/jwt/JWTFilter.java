@@ -1,7 +1,6 @@
-package com.amir.ecommerce.security;
+package com.amir.ecommerce.security.jwt;
 
 import com.amir.ecommerce.service.UserService;
-import com.amir.ecommerce.service.impl.UserServiceImpl;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

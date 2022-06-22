@@ -1,5 +1,6 @@
 package com.amir.ecommerce.controller.api;
 
+import com.amir.ecommerce.controller.request.ProductRequest;
 import com.amir.ecommerce.dto.ProductDto;
 import com.amir.ecommerce.model.Product;
 import com.amir.ecommerce.service.ProductService;
@@ -18,8 +19,8 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void addProduct(@Valid @RequestBody ProductDto productDto){
-        productService.add(productDto);
+    public void addProduct(@Valid @RequestBody ProductRequest productRequest){
+        productService.add(productRequest);
     }
 
     @GetMapping
@@ -27,8 +28,18 @@ public class ProductController {
         return productService.getProducts();
     }
 
+    @GetMapping("/{productId}")
+    public Product getProduct(@PathVariable Long productId){
+        return productService.getProduct(productId);
+    }
+
+    @DeleteMapping("/{productId}")
+    public void deleteProduct(@PathVariable Long productId){
+        productService.delete(productId);
+    }
+
     @PutMapping("/update/{produtdID}")
-    public void updateProduct(@PathVariable Long productID, @Valid @RequestBody ProductDto productDto){
-        productService.update(productID, productDto);
+    public void updateProduct(@PathVariable Long productID, @Valid @RequestBody ProductRequest productRequest){
+        productService.update(productID, productRequest);
     }
 }

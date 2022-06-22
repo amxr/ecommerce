@@ -13,4 +13,6 @@ public interface OrderService {
     void placeOrder(String sessionId);
 
     List<Order> getAllOrders();
+
+    Order getOrder(Long orderId);
 }

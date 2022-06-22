@@ -4,6 +4,7 @@ import com.amir.ecommerce.dto.CartDto;
 import com.amir.ecommerce.dto.CartItemDto;
 import com.amir.ecommerce.dto.CheckoutItemDto;
 import com.amir.ecommerce.dto.StripeResponse;
+import com.amir.ecommerce.exceptions.ResourceNotFoundException;
 import com.amir.ecommerce.model.Order;
 import com.amir.ecommerce.model.OrderItem;
 import com.amir.ecommerce.model.User;
@@ -12,14 +13,17 @@ import com.amir.ecommerce.repository.OrderRepository;
 import com.amir.ecommerce.repository.UserRepository;
 import com.amir.ecommerce.service.CartService;
 import com.amir.ecommerce.service.OrderService;
+import com.amir.ecommerce.service.UserService;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -40,6 +44,9 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Autowired
+    private UserService userService;
+
     @Value("${BASE_URL}")
     private String baseURL;
 
@@ -56,8 +63,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void placeOrder(String sessionId) {
-        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userRepository.findUserByEmail(email.toLowerCase()).orElseThrow();
+        User user = userService.getUser();
 
         CartDto cartDto = cartService.getCartItems();
 
@@ -81,10 +87,25 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getAllOrders() {
-        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userRepository.findUserByEmail(email.toLowerCase()).orElseThrow();
+        User user = userService.getUser();
 
         return orderRepository.findAllByUserOrderByCreatedDateDesc(user);
+    }
+
+    @Override
+    public Order getOrder(Long orderId) {
+        User user = userService.getUser();
+
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("Order not found.")
+                );
+
+        if(!order.getUser().equals(user)){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "This order does not belong to you.");
+        }
+
+        return order;
     }
 
     // create total price and send product name as input
