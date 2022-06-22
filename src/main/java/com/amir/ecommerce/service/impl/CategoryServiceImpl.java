@@ -1,5 +1,8 @@
 package com.amir.ecommerce.service.impl;
 
+import com.amir.ecommerce.controller.request.CategoryRequest;
+import com.amir.ecommerce.exceptions.ResourceNotFoundException;
+import com.amir.ecommerce.mapper.CategoryMapper;
 import com.amir.ecommerce.model.Category;
 import com.amir.ecommerce.repository.CategoryRepository;
 import com.amir.ecommerce.service.CategoryService;
@@ -17,10 +20,11 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryRepository categoryRepository;
 
     @Override
-    public void create(Category category) {
-        if(categoryRepository.findByName(category.getName()).isPresent()){
+    public void create(CategoryRequest categoryRequest) {
+        if(categoryRepository.findByName(categoryRequest.getName()).isPresent()){
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Category already exists");
         }
+        Category category = CategoryMapper.toCategory(categoryRequest);
         categoryRepository.save(category);
     }
 
@@ -30,17 +34,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void updateCategory(Long categoryID, Category category) {
-        Category category1 = categoryRepository.findById(categoryID)
+    public void updateCategory(Long categoryID, CategoryRequest categoryRequest) {
+        Category category = categoryRepository.findById(categoryID)
                 .orElseThrow(
-                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid category id.")
+                        () -> new ResourceNotFoundException("Invalid category id.")
                 );
-
-        category1
-                .setName(category.getName())
-                .setDescription(category.getDescription())
-                .setImageUrl(category.getImageUrl());
-
-        categoryRepository.save(category1);
+        CategoryMapper.updateCategory(category, categoryRequest);
+        categoryRepository.save(category);
     }
 }

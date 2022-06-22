@@ -19,9 +19,9 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "category_sequence")
     private Long id;
 
-    private @NotBlank String name;
+    private String name;
 
-    private @NotBlank String description;
+    private String description;
 
-    private @NotBlank String imageUrl;
+    private String imageUrl;
 }

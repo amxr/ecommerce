@@ -1,5 +1,6 @@
 package com.amir.ecommerce.controller.api;
 
+import com.amir.ecommerce.controller.request.CategoryRequest;
 import com.amir.ecommerce.model.Category;
 import com.amir.ecommerce.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,15 +11,15 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/category")
+@RequestMapping("/api/category")
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void create(@Valid @RequestBody Category category){
-        categoryService.create(category);
+    public void create(@Valid @RequestBody CategoryRequest categoryRequest){
+        categoryService.create(categoryRequest);
     }
 
     @GetMapping
@@ -27,7 +28,7 @@ public class CategoryController {
     }
 
     @PutMapping("/update/{categoryId}")
-    public void updateCategory(@PathVariable("categoryID") Long categoryID, @Valid @RequestBody Category category){
-        categoryService.updateCategory(categoryID, category);
+    public void updateCategory(@PathVariable("categoryID") Long categoryID, @Valid @RequestBody CategoryRequest categoryRequest){
+        categoryService.updateCategory(categoryID, categoryRequest);
     }
 }

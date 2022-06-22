@@ -1,10 +1,28 @@
-create sequence  IF NOT EXISTS category_sequence START with 1 INCREMENT BY 1;
 
-create sequence  IF NOT EXISTS product_sequence START with 1 INCREMENT BY 1;
+CREATE SEQUENCE  IF NOT EXISTS cart_sequence START WITH 1 INCREMENT BY 1;
 
-create sequence  IF NOT EXISTS user_sequence START with 1 INCREMENT BY 1;
+CREATE SEQUENCE  IF NOT EXISTS category_sequence START WITH 1 INCREMENT BY 1;
 
-create TABLE categories (
+CREATE SEQUENCE  IF NOT EXISTS order_sequence START WITH 1 INCREMENT BY 1;
+
+CREATE SEQUENCE  IF NOT EXISTS orderitem_sequence START WITH 1 INCREMENT BY 1;
+
+CREATE SEQUENCE  IF NOT EXISTS product_sequence START WITH 1 INCREMENT BY 1;
+
+CREATE SEQUENCE  IF NOT EXISTS user_sequence START WITH 1 INCREMENT BY 1;
+
+CREATE SEQUENCE  IF NOT EXISTS wishlist_sequence START WITH 1 INCREMENT BY 1;
+
+CREATE TABLE cart (
+  id BIGINT NOT NULL,
+   created_date TIMESTAMP WITHOUT TIME ZONE,
+   product_id BIGINT NOT NULL,
+   user_id BIGINT NOT NULL,
+   quantity INTEGER,
+   CONSTRAINT pk_cart PRIMARY KEY (id)
+);
+
+CREATE TABLE categories (
   id BIGINT NOT NULL,
    name VARCHAR(255),
    description VARCHAR(255),
@@ -12,7 +30,26 @@ create TABLE categories (
    CONSTRAINT pk_categories PRIMARY KEY (id)
 );
 
-create TABLE products (
+CREATE TABLE orderitems (
+  id BIGINT NOT NULL,
+   quantity INTEGER,
+   price DOUBLE PRECISION,
+   created_date TIMESTAMP WITHOUT TIME ZONE,
+   order_id BIGINT,
+   product_id BIGINT,
+   CONSTRAINT pk_orderitems PRIMARY KEY (id)
+);
+
+CREATE TABLE orders (
+  id BIGINT NOT NULL,
+   created_date TIMESTAMP WITHOUT TIME ZONE,
+   total_price DOUBLE PRECISION,
+   session_id VARCHAR(255),
+   user_id BIGINT,
+   CONSTRAINT pk_orders PRIMARY KEY (id)
+);
+
+CREATE TABLE products (
   id BIGINT NOT NULL,
    name VARCHAR(255),
    imageurl VARCHAR(255),
@@ -22,7 +59,7 @@ create TABLE products (
    CONSTRAINT pk_products PRIMARY KEY (id)
 );
 
-create TABLE users (
+CREATE TABLE users (
   id BIGINT NOT NULL,
    first_name VARCHAR(255),
    last_name VARCHAR(255),
@@ -32,4 +69,26 @@ create TABLE users (
    CONSTRAINT pk_users PRIMARY KEY (id)
 );
 
-alter table products add CONSTRAINT FK_PRODUCTS_ON_CATEGORY FOREIGN KEY (category_id) REFERENCES categories (id);
+CREATE TABLE wishlist (
+  id BIGINT NOT NULL,
+   user_id BIGINT NOT NULL,
+   created_date TIMESTAMP WITHOUT TIME ZONE,
+   product_id BIGINT,
+   CONSTRAINT pk_wishlist PRIMARY KEY (id)
+);
+
+ALTER TABLE cart ADD CONSTRAINT FK_CART_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES products (id);
+
+ALTER TABLE cart ADD CONSTRAINT FK_CART_ON_USER FOREIGN KEY (user_id) REFERENCES users (id);
+
+ALTER TABLE orderitems ADD CONSTRAINT FK_ORDERITEMS_ON_ORDER FOREIGN KEY (order_id) REFERENCES orders (id);
+
+ALTER TABLE orderitems ADD CONSTRAINT FK_ORDERITEMS_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES products (id);
+
+ALTER TABLE orders ADD CONSTRAINT FK_ORDERS_ON_USER FOREIGN KEY (user_id) REFERENCES users (id);
+
+ALTER TABLE products ADD CONSTRAINT FK_PRODUCTS_ON_CATEGORY FOREIGN KEY (category_id) REFERENCES categories (id);
+
+ALTER TABLE wishlist ADD CONSTRAINT FK_WISHLIST_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES products (id);
+
+ALTER TABLE wishlist ADD CONSTRAINT FK_WISHLIST_ON_USER FOREIGN KEY (user_id) REFERENCES users (id);

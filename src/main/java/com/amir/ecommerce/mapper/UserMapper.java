@@ -1,4 +1,4 @@
-package com.amir.ecommerce.dto.mapper;
+package com.amir.ecommerce.mapper;
 
 import com.amir.ecommerce.controller.request.SignUpRequest;
 import com.amir.ecommerce.dto.UserDto;
