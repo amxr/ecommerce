@@ -13,8 +13,8 @@ public class CategoryMapper {
 
     public static void updateCategory(Category category, CategoryRequest categoryRequest){
         category
-                .setName(category.getName())
-                .setDescription(category.getDescription())
-                .setImageUrl(category.getImageUrl());
+                .setName(categoryRequest.getName())
+                .setDescription(categoryRequest.getDescription())
+                .setImageUrl(categoryRequest.getImageUrl());
     }
 }

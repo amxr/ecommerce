@@ -10,5 +10,9 @@ public interface CategoryService {
 
     List<Category> getCategories();
 
-    void updateCategory(Long categoryID, CategoryRequest category);
+    void updateCategory(Long categoryId, CategoryRequest category);
+
+    Category getCategory(Long categoryId);
+
+    void deleteCategory(Long categoryId);
 }
